@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} студента</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} студента</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a href="/" class="btn btn-default">Отмена</a>
+    </form>
+</div>
+</body>
+</html>
