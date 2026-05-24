@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Avg
+from django.shortcuts import redirect, get_object_or_404
+
 from .models import Student, Subject, Score
 from .forms import StudentForm, ScoreForm
 
@@ -86,3 +88,36 @@ class ScoreCreateView(CreateView):
     form_class = ScoreForm
     template_name = 'score_form.html'
     success_url = reverse_lazy('index')
+
+
+# Новые представления для выбора студента
+class StudentSelectEditView(TemplateView):
+    template_name = 'student_select.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['students'] = Student.objects.all().order_by('surname', 'name')
+        return context
+
+    def post(self, request):
+        student_id = request.POST.get('student_id')
+        if student_id:
+            return redirect('student_update', pk=student_id)
+        return redirect('index')
+
+
+class StudentSelectDeleteView(TemplateView):
+    template_name = 'student_select.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['students'] = Student.objects.all().order_by('surname', 'name')
+        context['delete_mode'] = True
+        return context
+
+    def post(self, request):
+        student_id = request.POST.get('student_id')
+        if student_id:
+            student = get_object_or_404(Student, pk=student_id)
+            student.delete()
+        return redirect('index')
