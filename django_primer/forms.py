@@ -18,5 +18,5 @@ class ScoreForm(forms.ModelForm):
         widgets = {
             'student': forms.Select(attrs={'class': 'form-control'}),
             'subject': forms.Select(attrs={'class': 'form-control'}),
-            'value': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5', 'min': '0', 'max': '5'}),
+            'value': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '5'}),
         }
