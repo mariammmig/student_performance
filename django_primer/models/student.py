@@ -8,10 +8,10 @@ class Student(models.Model):
 
     @property
     def fio(self):
-        return f'{self.name} {self.surname}'
+        return f'{self.surname} {self.name}' 
 
     def __str__(self):
-        return f'{self.fio} ({self.email})'
+        return f'{self.surname} {self.name} ({self.email})'
 
     def __repr__(self):
-        return f'Student(name="{self.name}", name="{self.surname}", name="{self.email}")'
+        return f'Student(surname="{self.surname}", name="{self.name}", email="{self.email}")'

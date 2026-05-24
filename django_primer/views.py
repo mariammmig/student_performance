@@ -9,7 +9,6 @@ from .forms import StudentForm, ScoreForm
 
 class IndexView(TemplateView):
     template_name = "index.html"
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
@@ -18,11 +17,12 @@ class IndexView(TemplateView):
         students = list(Student.objects.prefetch_related('score_set__subject').all())
         
         if sort_by == 'name':
-            students.sort(key=lambda s: s.name.lower())
+            students.sort(key=lambda s: (s.name.lower(), s.surname.lower()))
+        
         elif sort_by == 'surname':
-            students.sort(key=lambda s: s.surname.lower())
+            students.sort(key=lambda s: (s.surname.lower(), s.name.lower()))
+        
         elif sort_by == 'avg_score':
-
             def get_avg(student):
                 scores = student.score_set.all()
                 if scores:
