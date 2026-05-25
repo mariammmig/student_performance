@@ -6,19 +6,39 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <style>
+        .hover-dark:hover {
+            filter: brightness(0.85);
+            transition: all 0.2s ease;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align:center;">Успеваемость студентов</h1>
+        <h1 style="text-align:center;">Система учета успеваемости студентов</h1>
 
-        <div class="row" style="margin-bottom: 20px; margin-top: 20px;">
-            <div class="col-md-8">
+        <div class="row" style="margin-bottom: 10px; margin-top: 20px;">
+            <div class="col-md-12">
                 <a href="{% url 'student_create' %}" class="btn btn-primary">+ Добавить студента</a>
-                <a href="{% url 'score_create' %}" class="btn btn-success">+ Добавить оценку</a>
-                <a href="{% url 'student_select_edit' %}" class="btn btn-warning">Редактировать студента</a>
-                <a href="{% url 'student_select_delete' %}" class="btn btn-danger">Удалить студента</a>
+                <a href="{% url 'student_select_edit' %}" 
+                   style="background-color: #3d7bb3; border-color: #3d7bb3; color: white;" 
+                   class="btn hover-dark">Редактировать студента</a>
+                <a href="{% url 'student_select_delete' %}" 
+                   style="background-color: #5b99cf; border-color: #5b99cf; color: white;" 
+                   class="btn hover-dark">Удалить студента</a>
             </div>
-            
+        </div>
+
+        <div class="row" style="margin-bottom: 25px;">
+            <div class="col-md-8">
+                <a href="{% url 'score_create' %}" class="btn btn-success">+ Добавить оценку</a>
+                <a href="{% url 'score_select_edit' %}" 
+                   style="background-color: #51b051; border-color: #51b051; color: white;" 
+                   class="btn hover-dark">Редактировать оценку</a>
+                <a href="{% url 'score_select_delete' %}" 
+                   style="background-color: #66bd66; border-color: #66bd66; color: white;" 
+                   class="btn hover-dark">Удалить оценку</a>
+            </div>
             <div class="col-md-4 text-right">
                 <div class="btn-group">
                     <a href="?sort=name" class="btn btn-default {% if current_sort == 'name' %}active{% endif %}">По имени</a>

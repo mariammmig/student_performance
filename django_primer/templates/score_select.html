@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% if delete_mode %}Удалить{% else %}Редактировать{% endif %} оценку</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container" style="margin-top: 50px;">
+        <h2>
+            {% if delete_mode %}
+                Удалить оценку
+            {% else %}
+                Редактировать оценку
+            {% endif %}
+        </h2>
+        
+        <form method="post" style="max-width: 700px;">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Выберите оценку:</label>
+                <select name="score_id" class="form-control" required>
+                    <option value="">--- Выберите оценку ---</option>
+                    {% for score in scores %}
+                    <option value="{{ score.id }}">
+                        {{ score.student.fio }} — {{ score.subject.name }} ({{ score.value }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="btn {% if delete_mode %}btn-danger{% else %}btn-warning{% endif %}">
+                {% if delete_mode %}Удалить{% else %}Редактировать{% endif %}
+            </button>
+            <a href="/" class="btn btn-default">Отмена</a>
+        </form>
+    </div>
+</body>
+</html>
