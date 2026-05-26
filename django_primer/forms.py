@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student, Score
+from .models import Student, Score, Subject
 
 class StudentForm(forms.ModelForm):
     class Meta:
@@ -29,4 +29,18 @@ class ScoreForm(forms.ModelForm):
             'student': forms.Select(attrs={'class': 'form-control'}),
             'subject': forms.Select(attrs={'class': 'form-control'}),
             'value': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '5'}),
+        }
+
+class SubjectForm(forms.ModelForm):
+    class Meta:
+        model = Subject
+        fields = ['name']
+        labels = {
+            'name': 'Название предмета',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Введите название предмета'
+            }),
         }

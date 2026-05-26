@@ -17,27 +17,27 @@
     <div class="container">
         <h1 style="text-align:center;">Система учета успеваемости студентов</h1>
 
-        <div class="row" style="margin-bottom: 10px; margin-top: 20px;">
+        <div class="row" style="margin-bottom: 8px; margin-top: 20px;">
             <div class="col-md-12">
                 <a href="{% url 'student_create' %}" class="btn btn-primary">+ Добавить студента</a>
-                <a href="{% url 'student_select_edit' %}" 
-                   style="background-color: #3d7bb3; border-color: #3d7bb3; color: white;" 
-                   class="btn hover-dark">Редактировать студента</a>
-                <a href="{% url 'student_select_delete' %}" 
-                   style="background-color: #5b99cf; border-color: #5b99cf; color: white;" 
-                   class="btn hover-dark">Удалить студента</a>
+                <a href="{% url 'student_select_edit' %}" style="background-color: #3d7bb3; border-color: #3d7bb3; color: white;" class="btn hover-dark">Редактировать студента</a>
+                <a href="{% url 'student_select_delete' %}" style="background-color: #5b99cf; border-color: #5b99cf; color: white;" class="btn hover-dark">Удалить студента</a>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 8px;">
+            <div class="col-md-12">
+                <a href="{% url 'score_create' %}" class="btn btn-success">+ Добавить оценку</a>
+                <a href="{% url 'score_select_edit' %}" style="background-color: #51b051; border-color: #51b051; color: white;" class="btn hover-dark">Редактировать оценку</a>
+                <a href="{% url 'score_select_delete' %}" style="background-color: #66bd66; border-color: #66bd66; color: white;" class="btn hover-dark">Удалить оценку</a>
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 25px;">
             <div class="col-md-8">
-                <a href="{% url 'score_create' %}" class="btn btn-success">+ Добавить оценку</a>
-                <a href="{% url 'score_select_edit' %}" 
-                   style="background-color: #51b051; border-color: #51b051; color: white;" 
-                   class="btn hover-dark">Редактировать оценку</a>
-                <a href="{% url 'score_select_delete' %}" 
-                   style="background-color: #66bd66; border-color: #66bd66; color: white;" 
-                   class="btn hover-dark">Удалить оценку</a>
+                <a href="{% url 'subject_create' %}" style="background-color: #7b0f94; border-color: #7b0f94; color: white;" class="btn hover-dark">+ Добавить предмет</a>
+                <a href="{% url 'subject_select_edit' %}" style="background-color: #971db3; border-color: #971db3; color: white;" class="btn hover-dark">Редактировать предмет</a>
+                <a href="{% url 'subject_select_delete' %}" style="background-color: #d031f5; border-color: #d031f5; color: white;" class="btn hover-dark">Удалить предмет</a>
             </div>
             <div class="col-md-4 text-right">
                 <div class="btn-group">

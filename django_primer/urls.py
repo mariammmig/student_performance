@@ -21,12 +21,16 @@ from .views import (
     StudentCreateView,
     StudentUpdateView,
     StudentDeleteView,
-    ScoreCreateView,
-    ScoreUpdateView,
     StudentSelectEditView,
     StudentSelectDeleteView,
+    ScoreCreateView,
+    ScoreUpdateView,
     ScoreSelectEditView,
-    ScoreSelectDeleteView
+    ScoreSelectDeleteView,
+    SubjectCreateView,
+    SubjectUpdateView,
+    SubjectSelectEditView,
+    SubjectSelectDeleteView
 )
 
 urlpatterns = [
@@ -42,6 +46,11 @@ urlpatterns = [
     path('score/<int:pk>/edit/', ScoreUpdateView.as_view(), name='score_update'),
     path('score/select-edit/', ScoreSelectEditView.as_view(), name='score_select_edit'),
     path('score/select-delete/', ScoreSelectDeleteView.as_view(), name='score_select_delete'),
+    
+    path('subject/create/', SubjectCreateView.as_view(), name='subject_create'),
+    path('subject/<int:pk>/edit/', SubjectUpdateView.as_view(), name='subject_update'),
+    path('subject/select-edit/', SubjectSelectEditView.as_view(), name='subject_select_edit'),
+    path('subject/select-delete/', SubjectSelectDeleteView.as_view(), name='subject_select_delete'),
     
     path('admin/', admin.site.urls),
 ]

@@ -4,11 +4,12 @@ from django.db.models import Avg
 from django.shortcuts import redirect, get_object_or_404
 
 from .models import Student, Subject, Score
-from .forms import StudentForm, ScoreForm
+from .forms import StudentForm, ScoreForm, SubjectForm
 
 
 class IndexView(TemplateView):
     template_name = "index.html"
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
@@ -18,10 +19,8 @@ class IndexView(TemplateView):
         
         if sort_by == 'name':
             students.sort(key=lambda s: (s.name.lower(), s.surname.lower()))
-        
         elif sort_by == 'surname':
             students.sort(key=lambda s: (s.surname.lower(), s.name.lower()))
-        
         elif sort_by == 'avg_score':
             def get_avg(student):
                 scores = student.score_set.all()
@@ -35,11 +34,8 @@ class IndexView(TemplateView):
         student_statistics = []
         for student in students:
             scores_dict = {score.subject.name: score.value for score in student.score_set.all()}
-            scores_list = []
-            for subject in subjects:
-                value = scores_dict.get(subject.name, 0)
-                scores_list.append(f"{value:.1f}" if value > 0 else "-")
-        
+            scores_list = [f"{scores_dict.get(subject.name, 0):.1f}" if scores_dict.get(subject.name, 0) > 0 else "-" for subject in subjects]
+            
             score_values = [score.value for score in student.score_set.all()]
             avg_score = sum(score_values) / len(score_values) if score_values else 0
             
@@ -71,13 +67,11 @@ class IndexView(TemplateView):
         })
         return context
 
-
 class StudentCreateView(CreateView):
     model = Student
     form_class = StudentForm
     template_name = 'student_form.html'
     success_url = reverse_lazy('index')
-
 
 class StudentUpdateView(UpdateView):
     model = Student
@@ -85,58 +79,11 @@ class StudentUpdateView(UpdateView):
     template_name = 'student_form.html'
     success_url = reverse_lazy('index')
 
-
 class StudentDeleteView(DeleteView):
     model = Student
     template_name = 'student_delete.html'
     success_url = reverse_lazy('index')
 
-
-class ScoreCreateView(CreateView):
-    model = Score
-    form_class = ScoreForm
-    template_name = 'score_form.html'
-    success_url = reverse_lazy('index')
-
-
-class ScoreUpdateView(UpdateView):
-    model = Score
-    form_class = ScoreForm
-    template_name = 'score_form.html'
-    success_url = reverse_lazy('index')
-
-
-class ScoreSelectEditView(TemplateView):
-    template_name = 'score_select.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['scores'] = Score.objects.select_related('student', 'subject').all().order_by('student__surname', 'student__name')
-        return context
-
-    def post(self, request):
-        score_id = request.POST.get('score_id')
-        if score_id:
-            return redirect('score_update', pk=score_id)
-        return redirect('index')
-
-
-class ScoreSelectDeleteView(TemplateView):
-    template_name = 'score_select.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['scores'] = Score.objects.select_related('student', 'subject').all().order_by('student__surname', 'student__name')
-        context['delete_mode'] = True
-        return context
-
-    def post(self, request):
-        score_id = request.POST.get('score_id')
-        if score_id:
-            score = get_object_or_404(Score, pk=score_id)
-            score.delete()
-        return redirect('index')
-    
 class StudentSelectEditView(TemplateView):
     template_name = 'student_select.html'
 
@@ -150,7 +97,6 @@ class StudentSelectEditView(TemplateView):
         if student_id:
             return redirect('student_update', pk=student_id)
         return redirect('index')
-
 
 class StudentSelectDeleteView(TemplateView):
     template_name = 'student_select.html'
@@ -167,4 +113,87 @@ class StudentSelectDeleteView(TemplateView):
             student = get_object_or_404(Student, pk=student_id)
             student.delete()
         return redirect('index')
-    
+
+class ScoreCreateView(CreateView):
+    model = Score
+    form_class = ScoreForm
+    template_name = 'score_form.html'
+    success_url = reverse_lazy('index')
+
+class ScoreUpdateView(UpdateView):
+    model = Score
+    form_class = ScoreForm
+    template_name = 'score_form.html'
+    success_url = reverse_lazy('index')
+
+class ScoreSelectEditView(TemplateView):
+    template_name = 'score_select.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['scores'] = Score.objects.select_related('student', 'subject').all().order_by('student__surname', 'student__name')
+        return context
+
+    def post(self, request):
+        score_id = request.POST.get('score_id')
+        if score_id:
+            return redirect('score_update', pk=score_id)
+        return redirect('index')
+
+class ScoreSelectDeleteView(TemplateView):
+    template_name = 'score_select.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['scores'] = Score.objects.select_related('student', 'subject').all().order_by('student__surname', 'student__name')
+        context['delete_mode'] = True
+        return context
+
+    def post(self, request):
+        score_id = request.POST.get('score_id')
+        if score_id:
+            score = get_object_or_404(Score, pk=score_id)
+            score.delete()
+        return redirect('index')
+
+class SubjectCreateView(CreateView):
+    model = Subject
+    form_class = SubjectForm
+    template_name = 'subject_form.html'
+    success_url = reverse_lazy('index')
+
+class SubjectUpdateView(UpdateView):
+    model = Subject
+    form_class = SubjectForm
+    template_name = 'subject_form.html'
+    success_url = reverse_lazy('index')
+
+class SubjectSelectEditView(TemplateView):
+    template_name = 'subject_select.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subjects'] = Subject.objects.all().order_by('name')
+        return context
+
+    def post(self, request):
+        subject_id = request.POST.get('subject_id')
+        if subject_id:
+            return redirect('subject_update', pk=subject_id)
+        return redirect('index')
+
+class SubjectSelectDeleteView(TemplateView):
+    template_name = 'subject_select.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subjects'] = Subject.objects.all().order_by('name')
+        context['delete_mode'] = True
+        return context
+
+    def post(self, request):
+        subject_id = request.POST.get('subject_id')
+        if subject_id:
+            subject = get_object_or_404(Subject, pk=subject_id)
+            subject.delete()
+        return redirect('index')
