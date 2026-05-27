@@ -1,6 +1,11 @@
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    TemplateView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.urls import reverse_lazy
-from django.db.models import Avg
+from typing import Any, Dict
 from django.shortcuts import redirect, get_object_or_404
 
 from .models import Student, Subject, Score
@@ -9,42 +14,55 @@ from .forms import StudentForm, ScoreForm, SubjectForm
 
 class IndexView(TemplateView):
     template_name = "index.html"
-    
-    def get_context_data(self, **kwargs):
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        
+
         sort_by = self.request.GET.get('sort', 'name')
-        
-        students = list(Student.objects.prefetch_related('score_set__subject').all())
-        
+
+        students = list(
+            Student.objects.prefetch_related('score_set__subject').all()
+        )
+
         if sort_by == 'name':
             students.sort(key=lambda s: (s.name.lower(), s.surname.lower()))
         elif sort_by == 'surname':
             students.sort(key=lambda s: (s.surname.lower(), s.name.lower()))
         elif sort_by == 'avg_score':
-            def get_avg(student):
+            def get_avg(student: Student) -> float:
                 scores = student.score_set.all()
                 if scores:
                     return sum(s.value for s in scores) / len(scores)
                 return 0
             students.sort(key=get_avg, reverse=True)
-        
+
         subjects = Subject.objects.all()
-        
+
         student_statistics = []
         for student in students:
-            scores_dict = {score.subject.name: score.value for score in student.score_set.all()}
-            scores_list = [f"{scores_dict.get(subject.name, 0):.1f}" if scores_dict.get(subject.name, 0) > 0 else "-" for subject in subjects]
-            
+            scores_dict = {
+                score.subject.name: score.value
+                for score in student.score_set.all()
+            }
+            scores_list = [
+                f"{scores_dict.get(subject.name, 0):.1f}"
+                if scores_dict.get(subject.name, 0) > 0 else "-"
+                for subject in subjects
+            ]
+
             score_values = [score.value for score in student.score_set.all()]
-            avg_score = sum(score_values) / len(score_values) if score_values else 0
-            
+            avg_score = (
+                sum(score_values) / len(score_values)
+                if score_values
+                else 0
+            )
+
             student_statistics.append({
                 'student': student,
                 'scores': scores_list,
                 'avg_score': round(avg_score, 2)
             })
-        
+
         if student_statistics:
             best = max(student_statistics, key=lambda x: x['avg_score'])
             worst = min(student_statistics, key=lambda x: x['avg_score'])
@@ -55,7 +73,7 @@ class IndexView(TemplateView):
         else:
             best_student = worst_student = None
             best_avg = worst_avg = 0
-        
+
         context.update({
             'subjects': subjects,
             'student_statistics': student_statistics,
@@ -67,11 +85,13 @@ class IndexView(TemplateView):
         })
         return context
 
+
 class StudentCreateView(CreateView):
     model = Student
     form_class = StudentForm
     template_name = 'student_form.html'
     success_url = reverse_lazy('index')
+
 
 class StudentUpdateView(UpdateView):
     model = Student
@@ -79,10 +99,12 @@ class StudentUpdateView(UpdateView):
     template_name = 'student_form.html'
     success_url = reverse_lazy('index')
 
+
 class StudentDeleteView(DeleteView):
     model = Student
     template_name = 'student_delete.html'
     success_url = reverse_lazy('index')
+
 
 class StudentSelectEditView(TemplateView):
     template_name = 'student_select.html'
@@ -97,6 +119,7 @@ class StudentSelectEditView(TemplateView):
         if student_id:
             return redirect('student_update', pk=student_id)
         return redirect('index')
+
 
 class StudentSelectDeleteView(TemplateView):
     template_name = 'student_select.html'
@@ -114,11 +137,13 @@ class StudentSelectDeleteView(TemplateView):
             student.delete()
         return redirect('index')
 
+
 class ScoreCreateView(CreateView):
     model = Score
     form_class = ScoreForm
     template_name = 'score_form.html'
     success_url = reverse_lazy('index')
+
 
 class ScoreUpdateView(UpdateView):
     model = Score
@@ -126,12 +151,15 @@ class ScoreUpdateView(UpdateView):
     template_name = 'score_form.html'
     success_url = reverse_lazy('index')
 
+
 class ScoreSelectEditView(TemplateView):
     template_name = 'score_select.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['scores'] = Score.objects.select_related('student', 'subject').all().order_by('student__surname', 'student__name')
+        context['scores'] = Score.objects.select_related(
+            'student', 'subject'
+        ).all().order_by('student__surname', 'student__name')
         return context
 
     def post(self, request):
@@ -140,12 +168,15 @@ class ScoreSelectEditView(TemplateView):
             return redirect('score_update', pk=score_id)
         return redirect('index')
 
+
 class ScoreSelectDeleteView(TemplateView):
     template_name = 'score_select.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['scores'] = Score.objects.select_related('student', 'subject').all().order_by('student__surname', 'student__name')
+        context['scores'] = Score.objects.select_related(
+            'student', 'subject'
+        ).all().order_by('student__surname', 'student__name')
         context['delete_mode'] = True
         return context
 
@@ -156,17 +187,20 @@ class ScoreSelectDeleteView(TemplateView):
             score.delete()
         return redirect('index')
 
+
 class SubjectCreateView(CreateView):
     model = Subject
     form_class = SubjectForm
     template_name = 'subject_form.html'
     success_url = reverse_lazy('index')
 
+
 class SubjectUpdateView(UpdateView):
     model = Subject
     form_class = SubjectForm
     template_name = 'subject_form.html'
     success_url = reverse_lazy('index')
+
 
 class SubjectSelectEditView(TemplateView):
     template_name = 'subject_select.html'
@@ -181,6 +215,7 @@ class SubjectSelectEditView(TemplateView):
         if subject_id:
             return redirect('subject_update', pk=subject_id)
         return redirect('index')
+
 
 class SubjectSelectDeleteView(TemplateView):
     template_name = 'subject_select.html'

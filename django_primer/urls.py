@@ -35,22 +35,74 @@ from .views import (
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    
-    path('student/create/', StudentCreateView.as_view(), name='student_create'),
-    path('student/<int:pk>/edit/', StudentUpdateView.as_view(), name='student_update'),
-    path('student/<int:pk>/delete/', StudentDeleteView.as_view(), name='student_delete'),
-    path('student/select-edit/', StudentSelectEditView.as_view(), name='student_select_edit'),
-    path('student/select-delete/', StudentSelectDeleteView.as_view(), name='student_select_delete'),
-    
-    path('score/create/', ScoreCreateView.as_view(), name='score_create'),
-    path('score/<int:pk>/edit/', ScoreUpdateView.as_view(), name='score_update'),
-    path('score/select-edit/', ScoreSelectEditView.as_view(), name='score_select_edit'),
-    path('score/select-delete/', ScoreSelectDeleteView.as_view(), name='score_select_delete'),
-    
-    path('subject/create/', SubjectCreateView.as_view(), name='subject_create'),
-    path('subject/<int:pk>/edit/', SubjectUpdateView.as_view(), name='subject_update'),
-    path('subject/select-edit/', SubjectSelectEditView.as_view(), name='subject_select_edit'),
-    path('subject/select-delete/', SubjectSelectDeleteView.as_view(), name='subject_select_delete'),
-    
+
+    path(
+        'student/create/',
+        StudentCreateView.as_view(),
+        name='student_create'
+    ),
+    path(
+        'student/<int:pk>/edit/',
+        StudentUpdateView.as_view(),
+        name='student_update'
+    ),
+    path(
+        'student/<int:pk>/delete/',
+        StudentDeleteView.as_view(),
+        name='student_delete'
+    ),
+    path(
+        'student/select-edit/',
+        StudentSelectEditView.as_view(),
+        name='student_select_edit'
+    ),
+    path(
+        'student/select-delete/',
+        StudentSelectDeleteView.as_view(),
+        name='student_select_delete'
+    ),
+
+    path(
+        'score/create/',
+        ScoreCreateView.as_view(),
+        name='score_create'
+    ),
+    path(
+        'score/<int:pk>/edit/',
+        ScoreUpdateView.as_view(),
+        name='score_update'
+    ),
+    path(
+        'score/select-edit/',
+        ScoreSelectEditView.as_view(),
+        name='score_select_edit'
+    ),
+    path(
+        'score/select-delete/',
+        ScoreSelectDeleteView.as_view(),
+        name='score_select_delete'
+    ),
+
+    path(
+        'subject/create/',
+        SubjectCreateView.as_view(),
+        name='subject_create'
+    ),
+    path(
+        'subject/<int:pk>/edit/',
+        SubjectUpdateView.as_view(),
+        name='subject_update'
+    ),
+    path(
+        'subject/select-edit/',
+        SubjectSelectEditView.as_view(),
+        name='subject_select_edit'
+    ),
+    path(
+        'subject/select-delete/',
+        SubjectSelectDeleteView.as_view(),
+        name='subject_select_delete'
+    ),
+
     path('admin/', admin.site.urls),
 ]

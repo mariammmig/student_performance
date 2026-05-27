@@ -1,25 +1,36 @@
 from django import forms
 from .models import Student, Score, Subject
 
+
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['name', 'surname', 'email']
+        fields: list[str] = ['name', 'surname', 'email']
         labels = {
             'name': 'Имя',
             'surname': 'Фамилия',
             'email': 'Email',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
-            'surname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Имя'
+            }),
+            'surname': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Фамилия'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email'
+            }),
         }
+
 
 class ScoreForm(forms.ModelForm):
     class Meta:
         model = Score
-        fields = ['student', 'subject', 'value']
+        fields: list[str] = ['student', 'subject', 'value']
         labels = {
             'student': 'Студент',
             'subject': 'Предмет',
@@ -28,8 +39,13 @@ class ScoreForm(forms.ModelForm):
         widgets = {
             'student': forms.Select(attrs={'class': 'form-control'}),
             'subject': forms.Select(attrs={'class': 'form-control'}),
-            'value': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'max': '5'}),
+            'value': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '5'
+            }),
         }
+
 
 class SubjectForm(forms.ModelForm):
     class Meta:
@@ -40,7 +56,7 @@ class SubjectForm(forms.ModelForm):
         }
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 
+                'class': 'form-control',
                 'placeholder': 'Введите название предмета'
-            }),
+                }),
         }
